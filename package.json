@@ -1,0 +1,22 @@
+{
+  "name": "starRain",
+  "version": "0.0.0",
+  "description": "Graphic monitor of data events flow",
+  "main": "server/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ferflores/starRain.git"
+  },
+  "author": "Fernando Flores",
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/ferflores/starRain/issues"
+  },
+  "dependencies": {
+    "express": "~4.13.3",
+    "body-parser": "~1.14.1"
+  }
+}
