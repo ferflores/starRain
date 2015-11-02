@@ -17,6 +17,12 @@
   },
   "dependencies": {
     "express": "~4.13.3",
-    "body-parser": "~1.14.1"
+    "body-parser": "~1.14.1",
+    "jade": "~1.11.0",
+    "path": "~0.12.7"
+  },
+  "devDependencies": {
+    "gulp": "~3.9.0",
+    "gulp-nodemon": "~2.0.4"
   }
 }
