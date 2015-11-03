@@ -1,49 +1,60 @@
-$(document).ready(main);
+$(document).ready(function(){
 
-
-function main(){
 
 	var canvas = configureCanvas();
-	var project = document.getElementById('project').value;
+	dataModel.project = document.getElementById('project').value;
 
 	var socket = io();
 
-	socket.on('message', function(msg){
-	 	console.log(msg);
+	socket.on('message', function(result){
+		var existingResult = false;
+
+	 	for (var i = 0; i < dataModel.results.length; i++) {
+	 		if(dataModel.results[i].name == result){
+	 			existingResult = true;
+	 			break;
+	 		}
+	 	}
+
+	 	if(!existingResult){
+	 		dataModel.results.push({name: result})
+	 	}
+
 	});
 
 	socket.on('connect', function(){
-		
-		socket.emit('hello', {project:project});
+		socket.emit('hello', {project:dataModel.project});
 	});
 
-	var drawer = new Drawer({canvas:canvas, project:project});
+	var drawer = new Drawer({canvas:canvas, project:dataModel.project});
 
 	drawer.init();
-}
 
-function configureCanvas(){
-	var canvas = document.getElementById('canvas');
 
-	function resizeCanvas() {
+	function configureCanvas(){
+		var canvas = document.getElementById('canvas');
 
-		var container = $("#container");
+		function resizeCanvas() {
 
-		container.width(window.innerWidth);
-		container.height(window.innerHeight);
+			var container = $("#container");
 
-		var mainDiv = $("#main");
+			container.width(window.innerWidth);
+			container.height(window.innerHeight);
 
-        mainDiv.width(container.width());
-        mainDiv.height(container.height()-70);
+			var mainDiv = $("#main");
 
-        canvas.width = mainDiv.width();
-        canvas.height = mainDiv.height();
-    }
+	        mainDiv.width(container.width());
+	        mainDiv.height(container.height()-70);
 
-	window.addEventListener('resize', resizeCanvas, false);
+	        canvas.width = mainDiv.width();
+	        canvas.height = mainDiv.height();
+	    }
 
-	resizeCanvas();
+		window.addEventListener('resize', resizeCanvas, false);
 
-	return canvas;
-}
+		resizeCanvas();
+
+		return canvas;
+	}
+
+});
