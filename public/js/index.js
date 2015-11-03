@@ -4,6 +4,10 @@ $(document).ready(function(){
 	var canvas = configureCanvas();
 	dataModel.project = document.getElementById('project').value;
 
+	var drawer = new Drawer({canvas:canvas, dataModel:dataModel});
+
+	drawer.init();
+
 	var socket = io();
 
 	socket.on('message', function(result){
@@ -17,7 +21,8 @@ $(document).ready(function(){
 	 	}
 
 	 	if(!existingResult){
-	 		dataModel.results.push({name: result})
+	 		dataModel.results.push({name: result, angle:0, color:'#CCCCCC', x:0, y:0})
+	 		drawer.drawResults();
 	 	}
 
 	});
@@ -25,10 +30,6 @@ $(document).ready(function(){
 	socket.on('connect', function(){
 		socket.emit('hello', {project:dataModel.project});
 	});
-
-	var drawer = new Drawer({canvas:canvas, project:dataModel.project});
-
-	drawer.init();
 
 
 	function configureCanvas(){
