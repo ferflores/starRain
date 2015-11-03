@@ -1,0 +1,19 @@
+* { margin:0; padding:0; }
+
+html, body { width:100%; height:100%; }
+
+canvas {
+	display: block;
+	background-color: #000000
+}
+#header {
+	height: 69px;
+	background-color: #000000;
+	border-bottom: 1px dashed gray;
+}
+
+#header h1 {
+	color:gray;
+	padding-left: 2rem;
+	padding-top: 1rem;
+}

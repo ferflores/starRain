@@ -6,7 +6,6 @@ var clientComm = {
 		_this.io = require("socket.io").listen(app);
 
 		_this.io.on('connection', function(socket){
-			//console.log(socket);
 
 			socket.on('hello', function(data){
 				socket.join(data.project);
