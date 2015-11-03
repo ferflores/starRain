@@ -1,5 +1,3 @@
-
-
 var clientComm = {
 	io: null,
 	init : function(app){
