@@ -27,6 +27,6 @@ app.post('/api/:project/:result', function(req, res){
 server.listen(port);
 console.log("Listening on port: " + port + " :)");
 
-var clientComm = require('./clientComm');
+var clientComm = require('./modules/clientComm');
 
 clientComm.init(server);
