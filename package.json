@@ -4,7 +4,8 @@
   "description": "Graphic monitor of data events flow",
   "main": "server/app.js",
   "scripts": {
-    "test": "echo \"Msg: no test specified\" && exit 1"
+    "test": "gulp",
+    "start": "gulp"
   },
   "repository": {
     "type": "git",
