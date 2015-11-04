@@ -29,7 +29,7 @@ $(document).ready(function(){
 	 				x:0, 
 	 				y:0
 	 			});
-	 		
+
 	 		drawer.drawResults();
 	 	}
 
@@ -57,6 +57,10 @@ $(document).ready(function(){
 
 	        canvas.width = mainDiv.width();
 	        canvas.height = mainDiv.height();
+
+	        if(drawer){
+	        	drawer.canvasResized();
+	    	}
 	    }
 
 		window.addEventListener('resize', resizeCanvas, false);

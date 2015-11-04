@@ -4,10 +4,16 @@ function Drawer(options){
 	this.context = options.canvas.getContext("2d");
 	this.results = options.dataModel.results;
 	this.redrawAngles = true;
+	Drawer._self = this;
 }
 
+Drawer._self = null;
+
 Drawer.prototype.drawCircle = function(x, y, w, color, text){
-	var ctx = this.context;
+
+	_this = Drawer._self;
+
+	var ctx = _this.context;
 
 	ctx.moveTo(x,y);
 	ctx.beginPath();
@@ -17,7 +23,7 @@ Drawer.prototype.drawCircle = function(x, y, w, color, text){
 
 	if(text){
 		ctx = canvas.getContext("2d");
-		ctx.font = '12pt Calibri';
+		ctx.font = '8pt Calibri';
 		ctx.fillStyle = 'white';
 		ctx.textAlign = 'center';
 		ctx.fillText(text, x, y+w);
@@ -25,59 +31,70 @@ Drawer.prototype.drawCircle = function(x, y, w, color, text){
 }
 
 Drawer.prototype.drawProject = function(){
+	_this = Drawer._self;
 
-	var w = this.canvas.width/40;
-	var x = (this.canvas.width/2) - (w/2);
-	var y = this.canvas.height/2;
+	var w = _this.canvas.width/40;
+	var x = (_this.canvas.width/2) - (w/2);
+	var y = _this.canvas.height/2;
 
-	this.drawCircle(x,y,w,"#FF0000",this.project);
+	_this.drawCircle(x,y,w,"#FF0000",_this.project);
 
-	this.centerX = x;
-	this.centerY = y;
-	this.width = w;
+	_this.centerX = x;
+	_this.centerY = y;
+	_this.width = w;
 }
 
 Drawer.prototype.drawResults = function(){
-	this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+	_this = Drawer._self;
 
-	var distance = this.width * 10;
+	_this.context.clearRect(0, 0, _this.canvas.width, _this.canvas.height);
+
+	var distance = (_this.canvas.width + _this.canvas.height)/10;
 
 	var angle = Math.PI*2;
 
-	if(this.redrawAngles){
-		var angleIncrement = (Math.PI*2)/this.results.length;
+	if(_this.redrawAngles){
+		var angleIncrement = (Math.PI*2)/_this.results.length;
 
 		var currentAngle = 0;
 
-		for (var i = 0; i < this.results.length; i++) {
-			var result = this.results[i];
+		for (var i = 0; i < _this.results.length; i++) {
+			var result = _this.results[i];
 			result.angle = currentAngle;
 
-			result.x = Math.cos(result.angle) * distance + this.centerX;
-			result.y = Math.sin(result.angle) * distance + this.centerY;
+			result.x = Math.cos(result.angle) * distance + _this.centerX;
+			result.y = Math.sin(result.angle) * distance + _this.centerY;
 
 			currentAngle += angleIncrement;
 		}
 
-		this.redrawAngles = false;
+		_this.redrawAngles = false;
 	}
 
-	for (var i = 0; i < this.results.length; i++) {
-		var result = this.results[i];
+	for (var i = 0; i < _this.results.length; i++) {
+		var result = _this.results[i];
 
-		this.drawCircle(result.x, result.y, this.width, result.color, result.name);
+		_this.drawCircle(result.x, result.y, _this.width, result.color, result.name);
 
 	};
 
-	this.drawProject();
+	_this.drawProject();
+
+	requestAnimationFrame(_this.drawResults);
 }
 
 Drawer.prototype.addResult = function(result){
-	this.redrawAngles = true;
+	_this = Drawer._self;
 
-	this.results.push(result);
+	_this.redrawAngles = true;
+
+	_this.results.push(result);
+}
+
+Drawer.prototype.canvasResized = function(){
+	Drawer._self.redrawAngles = true;
 }
 
 Drawer.prototype.init = function(){
-	this.drawProject();
+	Drawer._self.drawProject();
 }
