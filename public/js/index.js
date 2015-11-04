@@ -21,7 +21,15 @@ $(document).ready(function(){
 	 	}
 
 	 	if(!existingResult){
-	 		dataModel.results.push({name: result, angle:0, color:'#CCCCCC', x:0, y:0})
+	 		drawer.addResult(
+	 			{
+	 				name: result, 
+	 				angle:0, 
+	 				color:'#CCCCCC', 
+	 				x:0, 
+	 				y:0
+	 			});
+	 		
 	 		drawer.drawResults();
 	 	}
 

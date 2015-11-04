@@ -3,6 +3,7 @@ function Drawer(options){
 	this.project = options.dataModel.project;
 	this.context = options.canvas.getContext("2d");
 	this.results = options.dataModel.results;
+	this.redrawAngles = true;
 }
 
 Drawer.prototype.drawCircle = function(x, y, w, color, text){
@@ -39,21 +40,42 @@ Drawer.prototype.drawProject = function(){
 Drawer.prototype.drawResults = function(){
 	this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-	var distance = 100;
+	var distance = this.width * 10;
+
+	var angle = Math.PI*2;
+
+	if(this.redrawAngles){
+		var angleIncrement = (Math.PI*2)/this.results.length;
+
+		var currentAngle = 0;
+
+		for (var i = 0; i < this.results.length; i++) {
+			var result = this.results[i];
+			result.angle = currentAngle;
+
+			result.x = Math.cos(result.angle) * distance + this.centerX;
+			result.y = Math.sin(result.angle) * distance + this.centerY;
+
+			currentAngle += angleIncrement;
+		}
+
+		this.redrawAngles = false;
+	}
 
 	for (var i = 0; i < this.results.length; i++) {
 		var result = this.results[i];
-
-		result.angle = Math.random()*Math.PI*2;
-
-		result.x = Math.cos(result.angle) * distance + this.centerX;
-		result.y = Math.sin(result.angle) * distance + this.centerY;
 
 		this.drawCircle(result.x, result.y, this.width, result.color, result.name);
 
 	};
 
 	this.drawProject();
+}
+
+Drawer.prototype.addResult = function(result){
+	this.redrawAngles = true;
+
+	this.results.push(result);
 }
 
 Drawer.prototype.init = function(){
