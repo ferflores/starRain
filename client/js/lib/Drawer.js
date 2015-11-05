@@ -1,100 +1,106 @@
-function Drawer(options){
-	this.canvas = options.canvas;
-	this.project = options.dataModel.project;
-	this.context = options.canvas.getContext("2d");
-	this.results = options.dataModel.results;
-	this.redrawAngles = true;
-	Drawer._self = this;
-}
+(function(){ 
 
-Drawer._self = null;
+	var canvas = null;
+	var project = null;
+	var context = null;
+	var results = null;
+	var redrawAngles = null;
+	var width = null;
 
-Drawer.prototype.drawCircle = function(x, y, w, color, text){
+	var drawer = {
+		configure: function(options){
+			canvas = options.canvas;
+			project = options.dataModel.project;
+			context = options.canvas.getContext("2d");
+			results = options.dataModel.results;
+			redrawAngles = true;
+			width = canvas.width;
 
-	_this = Drawer._self;
+			drawer.drawProject();
+		},
 
-	var ctx = _this.context;
+		drawCircle: function(x, y, w, color, text){
 
-	ctx.moveTo(x,y);
-	ctx.beginPath();
-	ctx.fillStyle = color;
-	ctx.arc(x, y, w/2, 0, 2 * Math.PI, false);
-	ctx.fill();
+			var ctx = context;
 
-	if(text){
-		ctx = canvas.getContext("2d");
-		ctx.font = '8pt Calibri';
-		ctx.fillStyle = 'white';
-		ctx.textAlign = 'center';
-		ctx.fillText(text, x, y+w);
-	}
-}
+			ctx.moveTo(x,y);
+			ctx.beginPath();
+			ctx.fillStyle = color;
+			ctx.arc(x, y, w/2, 0, 2 * Math.PI, false);
+			ctx.fill();
 
-Drawer.prototype.drawProject = function(){
-	_this = Drawer._self;
+			if(text){
+				ctx = canvas.getContext("2d");
+				ctx.font = '8pt Calibri';
+				ctx.fillStyle = 'white';
+				ctx.textAlign = 'center';
+				ctx.fillText(text, x, y+w);
+			}
+		},
 
-	var w = _this.canvas.width/40;
-	var x = (_this.canvas.width/2) - (w/2);
-	var y = _this.canvas.height/2;
+		drawProject: function(){
 
-	_this.drawCircle(x,y,w,"#FF0000",_this.project);
+			var w = canvas.width/40;
+			var x = (canvas.width/2) - (w/2);
+			var y = canvas.height/2;
 
-	_this.centerX = x;
-	_this.centerY = y;
-	_this.width = w;
-}
+			drawer.drawCircle(x,y,w,"#FF0000",project);
 
-Drawer.prototype.drawResults = function(){
-	_this = Drawer._self;
+			centerX = x;
+			centerY = y;
+			width = w;
+		},
 
-	_this.context.clearRect(0, 0, _this.canvas.width, _this.canvas.height);
+		drawResults: function(){
 
-	var distance = (_this.canvas.width + _this.canvas.height)/10;
+			context.clearRect(0, 0, canvas.width, canvas.height);
 
-	var angle = Math.PI*2;
+			var distance = (canvas.width + canvas.height)/10;
 
-	if(_this.redrawAngles){
-		var angleIncrement = (Math.PI*2)/_this.results.length;
+			var angle = Math.PI*2;
 
-		var currentAngle = 0;
+			if(redrawAngles){
+				var angleIncrement = (Math.PI*2)/results.length;
 
-		for (var i = 0; i < _this.results.length; i++) {
-			var result = _this.results[i];
-			result.angle = currentAngle;
+				var currentAngle = 0;
 
-			result.x = Math.cos(result.angle) * distance + _this.centerX;
-			result.y = Math.sin(result.angle) * distance + _this.centerY;
+				for (var i = 0; i < results.length; i++) {
+					var result = results[i];
+					result.angle = currentAngle;
 
-			currentAngle += angleIncrement;
+					result.x = Math.cos(result.angle) * distance + centerX;
+					result.y = Math.sin(result.angle) * distance + centerY;
+
+					currentAngle += angleIncrement;
+				}
+
+				redrawAngles = false;
+			}
+
+			for (var i = 0; i < results.length; i++) {
+				var result = results[i];
+
+				drawer.drawCircle(result.x, result.y, width, result.color, result.name);
+
+			};
+
+			drawer.drawProject();
+
+			requestAnimationFrame(drawer.drawResults);
+		},
+
+		addResult: function(result){
+
+			redrawAngles = true;
+
+			results.push(result);
+		},
+
+		canvasResized: function(){
+			redrawAngles = true;
 		}
-
-		_this.redrawAngles = false;
 	}
 
-	for (var i = 0; i < _this.results.length; i++) {
-		var result = _this.results[i];
+	module.exports = drawer;
 
-		_this.drawCircle(result.x, result.y, _this.width, result.color, result.name);
-
-	};
-
-	_this.drawProject();
-
-	requestAnimationFrame(_this.drawResults);
-}
-
-Drawer.prototype.addResult = function(result){
-	_this = Drawer._self;
-
-	_this.redrawAngles = true;
-
-	_this.results.push(result);
-}
-
-Drawer.prototype.canvasResized = function(){
-	Drawer._self.redrawAngles = true;
-}
-
-Drawer.prototype.init = function(){
-	Drawer._self.drawProject();
-}
+})();

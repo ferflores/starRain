@@ -1,4 +1,8 @@
-var dataModel = {
-	project: null,
-	results: []
-}
+(function(){
+	var dataModel = {
+		project: null,
+		results: []
+	}
+
+	module.exports = dataModel;
+})();

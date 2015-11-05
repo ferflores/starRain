@@ -6,6 +6,8 @@ var server = http.createServer(app);
 var bodyParser = require('body-parser');
 var path = require('path');
 
+var clientComm = require('./modules/clientComm');
+
 app.set('view engine', 'jade');
 app.set('views', path.join(__dirname, '..', 'client/views'));
 app.use(bodyParser.urlencoded({ extended: true}));
@@ -25,8 +27,6 @@ app.post('/api/:project/:result', function(req, res){
 });
 
 server.listen(port);
-console.log("Listening on port: " + port + " :)");
-
-var clientComm = require('./modules/clientComm');
-
 clientComm.init(server);
+
+console.log("Listening on port: " + port + " :)");

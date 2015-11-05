@@ -1,12 +1,12 @@
 $(document).ready(function(){
 
+	var drawer = require('./lib/Drawer.js');
+	var dataModel = require('./model/dataModel.js');
 
 	var canvas = configureCanvas();
 	dataModel.project = document.getElementById('project').value;
 
-	var drawer = new Drawer({canvas:canvas, dataModel:dataModel});
-
-	drawer.init();
+	drawer.configure({canvas:canvas, dataModel:dataModel});
 
 	var socket = io();
 
