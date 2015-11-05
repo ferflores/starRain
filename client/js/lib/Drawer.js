@@ -20,7 +20,6 @@
 			results = options.dataModel.results;
 			particles = options.dataModel.particles;
 			redrawAngles = true;
-			width = canvas.width;
 
 			drawer.drawProject();
 			drawer.drawResults();
@@ -59,7 +58,11 @@
 		},
 
 		pushParticle: function(result){
-			var newParticle = Particle.create(centerX, centerY, 0, 0, 0);
+			var polarity = Math.round(Math.random()) * 2 - 1;
+			var randomX = Math.random() * 10 * polarity;
+			var randomY = Math.random() * 10 * polarity;
+
+			var newParticle = Particle.create(centerX+randomX, centerY+randomY, 0, 0, 0);
 			newParticle['result'] = result;
 
 			newParticle.addSpring({x:result.x, y: result.y}, 0.02, 3);
@@ -72,13 +75,13 @@
 				var particle = particles[i];
 
 				if(particle.distanceTo({x:centerX, y: centerY}) > (canvas.width + canvas.height)/10){
-					particles.splice(i, 0);
+					particles.splice(i, 1);
 					continue;
 				}
 
 				particle.update();
 
-				drawer.drawCircle(particle.x, particle.y, 2,"#FF0000");
+				drawer.drawCircle(particle.x, particle.y, 4,"#FF0000");
 			};
 		},
 
