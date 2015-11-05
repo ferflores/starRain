@@ -1,11 +1,16 @@
 (function(){ 
 
+	var Particle = require('./Particle.js');
+
 	var canvas = null;
 	var project = null;
 	var context = null;
-	var results = null;
-	var redrawAngles = null;
-	var width = null;
+	var results = [];
+	var redrawAngles = true;
+	var width = 0;
+	var centerX = 0;
+	var centerY = 0;
+	var particles = [];
 
 	var drawer = {
 		configure: function(options){
@@ -13,10 +18,12 @@
 			project = options.dataModel.project;
 			context = options.canvas.getContext("2d");
 			results = options.dataModel.results;
+			particles = options.dataModel.particles;
 			redrawAngles = true;
 			width = canvas.width;
 
 			drawer.drawProject();
+			drawer.drawResults();
 		},
 
 		drawCircle: function(x, y, w, color, text){
@@ -49,6 +56,30 @@
 			centerX = x;
 			centerY = y;
 			width = w;
+		},
+
+		pushParticle: function(result){
+			var newParticle = Particle.create(centerX, centerY, 0, 0, 0);
+			newParticle['result'] = result;
+
+			newParticle.addSpring({x:result.x, y: result.y}, 0.02, 3);
+
+			particles.push(newParticle);
+		},
+
+		drawParticles: function(){
+			for (var i = 0; i < particles.length; i++) {
+				var particle = particles[i];
+
+				if(particle.distanceTo({x:centerX, y: centerY}) > (canvas.width + canvas.height)/10){
+					particles.splice(i, 0);
+					continue;
+				}
+
+				particle.update();
+
+				drawer.drawCircle(particle.x, particle.y, 2,"#FF0000");
+			};
 		},
 
 		drawResults: function(){
@@ -85,6 +116,7 @@
 			};
 
 			drawer.drawProject();
+			drawer.drawParticles();
 
 			requestAnimationFrame(drawer.drawResults);
 		},

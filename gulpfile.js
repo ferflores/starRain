@@ -6,9 +6,9 @@ var browserify = require('gulp-browserify');
  
 gulp.task('compress', function() {
   return gulp.src('client/js/index.js')
-  	.pipe(browserify())
-    .pipe(uglify())
-    .pipe(gulp.dest('public/js'));
+  	.pipe(browserify({debug:true}))
+    //.pipe(uglify())
+    .pipe(gulp.dest('public/js/'));
 });
 
 gulp.task('start', function () {

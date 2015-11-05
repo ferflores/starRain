@@ -11,16 +11,16 @@ $(document).ready(function(){
 	var socket = io();
 
 	socket.on('message', function(result){
-		var existingResult = false;
+		var resultFound = null;
 
 	 	for (var i = 0; i < dataModel.results.length; i++) {
 	 		if(dataModel.results[i].name == result){
-	 			existingResult = true;
+	 			resultFound = dataModel.results[i];
 	 			break;
 	 		}
 	 	}
 
-	 	if(!existingResult){
+	 	if(!resultFound){
 	 		drawer.addResult(
 	 			{
 	 				name: result, 
@@ -29,8 +29,8 @@ $(document).ready(function(){
 	 				x:0, 
 	 				y:0
 	 			});
-
-	 		drawer.drawResults();
+	 	}else{
+	 		drawer.pushParticle(resultFound);
 	 	}
 
 	});

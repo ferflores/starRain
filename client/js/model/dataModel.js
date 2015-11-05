@@ -1,7 +1,8 @@
 (function(){
 	var dataModel = {
 		project: null,
-		results: []
+		results: [],
+		particles: []
 	}
 
 	module.exports = dataModel;
