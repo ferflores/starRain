@@ -1,13 +1,15 @@
 var gulp = require('gulp');
-var uglify = require('gulp-uglify');
-var concat = require('gulp-concat'); //currently not used
 var nodemon = require('gulp-nodemon');
 var browserify = require('gulp-browserify');
+var environments = require('gulp-environments');
+
+var development = environments.development;
+var production = environments.production;
  
-gulp.task('compress', function() {
+gulp.task('browserify', function() {
   return gulp.src('client/js/index.js')
-  	.pipe(browserify({debug:true}))
-    //.pipe(uglify())
+  	.pipe(development(browserify({debug:true})))
+  	.pipe(production(browserify({debug:false})))
     .pipe(gulp.dest('public/js/'));
 });
 
@@ -18,4 +20,4 @@ gulp.task('start', function () {
   })
 })
 
-gulp.task('default',['compress', 'start']);
+gulp.task('default',['browserify', 'start']);
