@@ -7,10 +7,12 @@
 	var context = null;
 	var results = [];
 	var redrawAngles = true;
-	var width = 0;
+	var projectWidth = 0;
 	var centerX = 0;
 	var centerY = 0;
+	var resultsDistance = 0;
 	var particles = [];
+
 
 	var drawer = {
 		configure: function(options){
@@ -54,18 +56,30 @@
 
 			centerX = x;
 			centerY = y;
-			width = w;
+			projectWidth = w;
 		},
 
 		pushParticle: function(result){
 			var polarity = Math.round(Math.random()) * 2 - 1;
-			var randomX = Math.random() * 10 * polarity;
-			var randomY = Math.random() * 10 * polarity;
+			var randomX = Math.random() * 5 * polarity;
+			var randomY = Math.random() * 5 * polarity;
 
 			var newParticle = Particle.create(centerX+randomX, centerY+randomY, 0, 0, 0);
 			newParticle['result'] = result;
 
-			newParticle.addSpring({x:result.x, y: result.y}, 0.02, 3);
+			var resultAngle = Math.atan2(result.y, result.x);
+			var middlePoint = {
+				x: (centerX+result.x)/2,
+				y: (centerY+result.y)/2
+			}
+
+			var randomCurveLength = Math.random()*20;
+			var middlePointAngle = resultAngle + (polarity*0.8);
+			middlePoint.x = Math.cos(middlePointAngle) * randomCurveLength + middlePoint.x;
+			middlePoint.y = Math.sin(middlePointAngle) * randomCurveLength + middlePoint.y;
+
+			newParticle.middlePoint = middlePoint;
+			newParticle.addSpring({x:middlePoint.x, y: middlePoint.y}, 0.02, 3);
 
 			particles.push(newParticle);
 		},
@@ -74,7 +88,13 @@
 			for (var i = 0; i < particles.length; i++) {
 				var particle = particles[i];
 
-				if(particle.distanceTo({x:centerX, y: centerY}) > (canvas.width + canvas.height)/10){
+				if(particle.middlePoint && particle.distanceTo({x:particle.middlePoint.x, y: particle.middlePoint.y}) <=10){
+					particle.springs.splice(0, 1);
+					particle.addSpring({x:particle.result.x, y:particle.result.y}, 0.05, 3);
+					particle.middlePoint = null;
+				}
+
+				if(particle.distanceTo({x:centerX, y:centerY}) >= resultsDistance){
 					particles.splice(i, 1);
 					continue;
 				}
@@ -89,12 +109,11 @@
 
 			context.clearRect(0, 0, canvas.width, canvas.height);
 
-			var distance = (canvas.width + canvas.height)/10;
-
 			var angle = Math.PI*2;
 
 			if(redrawAngles){
 				var angleIncrement = (Math.PI*2)/results.length;
+				resultsDistance = (canvas.width + canvas.height)/10;
 
 				var currentAngle = 0;
 
@@ -102,8 +121,8 @@
 					var result = results[i];
 					result.angle = currentAngle;
 
-					result.x = Math.cos(result.angle) * distance + centerX;
-					result.y = Math.sin(result.angle) * distance + centerY;
+					result.x = Math.cos(result.angle) * resultsDistance + centerX;
+					result.y = Math.sin(result.angle) * resultsDistance + centerY;
 
 					currentAngle += angleIncrement;
 				}
@@ -114,7 +133,7 @@
 			for (var i = 0; i < results.length; i++) {
 				var result = results[i];
 
-				drawer.drawCircle(result.x, result.y, width, result.color, result.name);
+				drawer.drawCircle(result.x, result.y, projectWidth, result.color, result.name);
 
 			};
 
