@@ -1,3 +1,5 @@
 *.swp
 public/js
+public/components
 node_modules
+

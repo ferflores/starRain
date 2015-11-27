@@ -1,0 +1,20 @@
+doctype
+html
+	head
+		title starRain
+		script(src='/components/jquery/dist/jquery.min.js')
+		script(src='/components/bootstrap/dist/js/bootstrap.min.js')
+		link(rel='stylesheet', href='/components/bootstrap/dist/css/bootstrap.min.css', type='text/css' )
+	body
+		#container(class='container')
+			#header
+				h1 starRain
+			#main
+				div(class='row')
+					div(class='col-sm-6')
+						form(name='loginForm', method='post')
+							div(class='form-group')
+								input(type='text', name='username', class='form-control', placeholder='user')
+								input(type='password', name='password', class='form-control', placeholder='password')
+								input(type='submit', value='login', class='btn btn-info')
+		

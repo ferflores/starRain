@@ -1,0 +1,23 @@
+{
+  "name": "starRain",
+  "description": "Graphic monitor of data events flow",
+  "main": "server/app.js",
+  "authors": [
+    "Fernando Flores (ferflores@gmail.com)"
+  ],
+  "license": "BSD",
+  "homepage": "https://github.com/ferflores/starRain",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.6",
+    "socket.io-client": "~1.3.7",
+    "jquery": "~2.1.4"
+  }
+}
