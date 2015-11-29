@@ -1,5 +1,4 @@
 *.swp
-public/js
-public/components
+public/
 node_modules
 

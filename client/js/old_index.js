@@ -2,10 +2,9 @@ $(document).ready(function(){
 
 	var drawer = require('./lib/Drawer.js');
 	var dataModel = require('./model/dataModel.js');
-	var availableRooms = [];
 
 	var canvas = configureCanvas();
-	//dataModel.project = document.getElementById('project').value;
+	dataModel.project = document.getElementById('project').value;
 
 	drawer.configure({canvas:canvas, dataModel:dataModel});
 
@@ -37,33 +36,16 @@ $(document).ready(function(){
 	});
 
 	socket.on('connect', function(){
-		queryRooms();
+		socket.emit('hello', {project:dataModel.project});
 	});
 
-	socket.on('roomsUpdate', function(rooms){
-		updateRooms(rooms);
-	});
-
-	function updateRooms(rooms){
-		$('#roomList').empty();
-
-		$.each(rooms, function(i,e){
-			$('#roomList').append('<li class="roomOption">'+e+'</li>')
-		});
-	}
-
-	function queryRooms(){
-		socket.emit('getRooms');
-
-		setTimeout(queryRooms, 3000);
-	}
 
 	function configureCanvas(){
 		var canvas = document.getElementById('canvas');
 
 		function resizeCanvas() {
 
-			/*var container = $("#container");
+			var container = $("#container");
 
 			container.width(window.innerWidth);
 			container.height(window.innerHeight);
@@ -78,7 +60,7 @@ $(document).ready(function(){
 
 	        if(drawer){
 	        	drawer.canvasResized();
-	    	}*/
+	    	}
 	    }
 
 		window.addEventListener('resize', resizeCanvas, false);

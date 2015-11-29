@@ -1,0 +1,16 @@
+doctype
+html
+	head
+		title starRain
+		script(src='/components/socket.io-client/socket.io.js')
+		script(src='/components/jquery/dist/jquery.min.js')
+		script(src='/js/index.js')
+		link(rel='stylesheet', href='/css/index.css', type='text/css' )
+	body
+		input(type="hidden" id="project" value="#{project}")
+		#container
+			#header
+				h1 starRain
+			#main
+				canvas(id="canvas")
+	

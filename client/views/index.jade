@@ -4,13 +4,17 @@ html
 		title starRain
 		script(src='/components/socket.io-client/socket.io.js')
 		script(src='/components/jquery/dist/jquery.min.js')
+		script(src='/components/bootstrap/dist/js/bootstrap.min.js')
 		script(src='/js/index.js')
-		link(rel='stylesheet', href='/css/index.css', type='text/css' )
+		link(rel='stylesheet', href='/components/bootstrap/dist/css/bootstrap.min.css', type='text/css' )
+		link(rel='stylesheet', href='/css/index.css', type='text/css')
 	body
-		input(type="hidden" id="project" value="#{project}")
-		#container
-			#header
-				h1 starRain
-			#main
-				canvas(id="canvas")
-	
+		div(class='container-fluid')
+			div(class='row')
+				div(id='header' class='col-sm-12')
+					h1 starRain
+			div(class='row')
+				div(class='col-sm-2')
+					ul(id='roomList')
+				div(class='col-sm-10')
+					canvas(id='canvas')

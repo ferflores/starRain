@@ -20,6 +20,10 @@ var routingConfiguration = {
 		    res.render('index', {project: req.params.project});
 		});
 
+		app.get('/index', function (req, res) {
+		    res.render('index');
+		});
+
 		app.get('/login', function (req, res){
 			res.render('login');
 		});
@@ -32,10 +36,8 @@ var routingConfiguration = {
 
 		var bodyParser = require('body-parser');
 		var path = require('path');
-		var passport = require('passport')
 		var session = require('express-session');
 		var cookieParser = require('cookie-parser');
-		var flash = require('connect-flash');
 
 		app.use(express.static('public'));
 		app.set('view engine', 'jade');
@@ -52,7 +54,6 @@ var routingConfiguration = {
 		app.use(bodyParser.urlencoded({ extended: true}));
 		app.use(bodyParser.json());
 		app.use(passport.session());
-		app.use(flash());
 	}
 }
 
