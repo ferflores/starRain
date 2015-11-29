@@ -15,8 +15,6 @@ gulp.task('install', function(){
 
 gulp.task('compress', function() {
 
-  production(console.log("test"));
-
  return gulp.src('client/js/index.js')
     .pipe(development(browserify({debug:true})))
     .pipe(production(browserify({debug:false})))
