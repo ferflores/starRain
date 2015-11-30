@@ -39,7 +39,7 @@ var routingConfiguration = {
 		var session = require('express-session');
 		var cookieParser = require('cookie-parser');
 
-		app.use(express.static('public'));
+		app.use(express.static('public'), {maxAge:0});
 		app.set('view engine', 'jade');
 		app.set('views', path.join(__dirname, '../..', 'client/views'));
 		app.use(session({
