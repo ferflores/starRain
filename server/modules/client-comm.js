@@ -26,13 +26,18 @@ var clientComm = {
 		io = require("socket.io").listen(app);
 
 		io.on('connection', function(socket){
-
-			/*socket.on('hello', function(data){
-				socket.join(data.project);
-			});*/
-
 			socket.on('getRooms', function(){
 				socket.emit('roomsUpdate', utils.getAvailableRooms());
+			});
+
+			socket.on('click-room', function(room){
+				var rooms = utils.getAvailableRooms();
+
+				for (var i = 0; i < rooms.length; i++) {
+					socket.leave(rooms[i]);
+				}
+				
+				socket.join(room);
 			});
 		});
 	},

@@ -1,6 +1,7 @@
-html, body { 
+html, body {
 	background-color: #000000;
 	color:#CCCCCC;
+	height:100%;
 }
 
 #header {
@@ -9,5 +10,24 @@ html, body {
 
 #roomList {
 	border-right: 1px dashed gray;
-	min-height: 400px;
+	padding: 1rem;
+	height:100%;
+}
+
+.roomOption {
+	cursor: pointer;
+}
+
+.roomOption:hover {
+	font-weight: bold;
+}
+
+
+.container-fluid {
+    height:100%;
+}
+
+.fill{
+  height:100%;
+  min-height:100%;
 }

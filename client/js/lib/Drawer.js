@@ -1,26 +1,23 @@
-(function(){ 
+(function(){
 
 	var Particle = require('./Particle.js');
 
 	var canvas = null;
 	var project = null;
 	var context = null;
-	var results = [];
 	var redrawAngles = true;
 	var projectWidth = 0;
 	var centerX = 0;
 	var centerY = 0;
 	var resultsDistance = 0;
-	var particles = [];
+	var dataModel = null;
 
 
 	var drawer = {
 		configure: function(options){
 			canvas = options.canvas;
-			project = options.dataModel.project;
+			dataModel = options.dataModel;
 			context = options.canvas.getContext("2d");
-			results = options.dataModel.results;
-			particles = options.dataModel.particles;
 			redrawAngles = true;
 
 			drawer.drawProject();
@@ -48,15 +45,17 @@
 
 		drawProject: function(){
 
-			var w = canvas.width/40;
-			var x = (canvas.width/2) - (w/2);
-			var y = canvas.height/2;
+			if(dataModel.project){
+				var w = canvas.width/40;
+				var x = (canvas.width/2) - (w/2);
+				var y = canvas.height/2;
 
-			drawer.drawCircle(x,y,w,"#FF0000",project);
+				drawer.drawCircle(x,y,w,"#FF0000",dataModel.project);
 
-			centerX = x;
-			centerY = y;
-			projectWidth = w;
+				centerX = x;
+				centerY = y;
+				dataModel.projectWidth = w;
+			}
 		},
 
 		pushParticle: function(result){
@@ -81,12 +80,12 @@
 			newParticle.middlePoint = middlePoint;
 			newParticle.addSpring({x:middlePoint.x, y: middlePoint.y}, 0.02, 3);
 
-			particles.push(newParticle);
+			dataModel.particles.push(newParticle);
 		},
 
 		drawParticles: function(){
-			for (var i = 0; i < particles.length; i++) {
-				var particle = particles[i];
+			for (var i = 0; i < dataModel.particles.length; i++) {
+				var particle = dataModel.particles[i];
 
 				if(particle.middlePoint && particle.distanceTo({x:particle.middlePoint.x, y: particle.middlePoint.y}) <=10){
 					particle.springs.splice(0, 1);
@@ -95,7 +94,7 @@
 				}
 
 				if(particle.distanceTo({x:centerX, y:centerY}) >= resultsDistance){
-					particles.splice(i, 1);
+					dataModel.particles.splice(i, 1);
 					continue;
 				}
 
@@ -105,6 +104,14 @@
 			};
 		},
 
+		restart: function(project) {
+
+			context.clearRect(0, 0, canvas.width, canvas.height);
+			dataModel.results = [];
+			dataModel.particles = [];
+			dataModel.project = dataModel.project;
+		},
+
 		drawResults: function(){
 
 			context.clearRect(0, 0, canvas.width, canvas.height);
@@ -112,13 +119,13 @@
 			var angle = Math.PI*2;
 
 			if(redrawAngles){
-				var angleIncrement = (Math.PI*2)/results.length;
+				var angleIncrement = (Math.PI*2)/dataModel.results.length;
 				resultsDistance = (canvas.width + canvas.height)/10;
 
 				var currentAngle = 0;
 
-				for (var i = 0; i < results.length; i++) {
-					var result = results[i];
+				for (var i = 0; i < dataModel.results.length; i++) {
+					var result = dataModel.results[i];
 					result.angle = currentAngle;
 
 					result.x = Math.cos(result.angle) * resultsDistance + centerX;
@@ -130,10 +137,10 @@
 				redrawAngles = false;
 			}
 
-			for (var i = 0; i < results.length; i++) {
-				var result = results[i];
+			for (var i = 0; i < dataModel.results.length; i++) {
+				var result = dataModel.results[i];
 
-				drawer.drawCircle(result.x, result.y, projectWidth, result.color, result.name);
+				drawer.drawCircle(result.x, result.y, dataModel.projectWidth, result.color, result.name);
 
 			};
 
@@ -147,7 +154,7 @@
 
 			redrawAngles = true;
 
-			results.push(result);
+			dataModel.results.push(result);
 		},
 
 		canvasResized: function(){

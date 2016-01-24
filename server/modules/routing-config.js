@@ -6,14 +6,13 @@ var routingConfiguration = {
 
 	configureRoutes: function(app, passport){
 		app.get('*',function(req, res, next){
-		  if (req.url === '/' || req.url === '/login') return next();
+		  if (req.url === '/login') return next();
 
 		  if(!req.user){
 		    res.redirect('/login');
 		  }else{
-		    next();
-		  }
-
+				next();
+			}
 		});
 
 		app.get('/project/:project', function (req, res) {
@@ -39,7 +38,7 @@ var routingConfiguration = {
 		var session = require('express-session');
 		var cookieParser = require('cookie-parser');
 
-		app.use(express.static('public'), {maxAge:0});
+		app.use(express.static('public', {maxAge:0}));
 		app.set('view engine', 'jade');
 		app.set('views', path.join(__dirname, '../..', 'client/views'));
 		app.use(session({
